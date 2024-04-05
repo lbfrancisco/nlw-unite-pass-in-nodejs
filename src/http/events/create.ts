@@ -19,7 +19,7 @@ export async function create(
 
   if (eventSlugAlreadyExists) {
     return reply.status(400).send({
-      message: 'Another event with same title already exist',
+      message: 'Another event with same title already exist.',
     })
   }
 

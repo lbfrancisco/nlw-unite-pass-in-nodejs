@@ -2,17 +2,27 @@ POST http://localhost:3333/events
 Content-Type: application/json
 
 {
-  "title": "Stellar Summit",
+  "title": "Constant Summit 2",
   "details": "Um evento para quem é apaixonado por programação",
-  "maximumAttendees": 100
+  "maximumAttendees": 1
 }
 
 ###
 
-POST http://localhost:3333/events/82087c71-eb73-4754-b069-42392198ba6f/attendee
+POST http://localhost:3333/events/c61449b7-ef18-4f31-9cc6-892a8e3e592a/attendee
 Content-Type: application/json
 
 {
   "name": "Lucas",
-  "email": "lucas@mail.com"
+  "email": "lucas2@mail.com"
 }
+
+###
+
+GET http://localhost:3333/events/c61449b7-ef18-4f31-9cc6-892a8e3e592a
+Content-Type: application/json
+
+###
+
+GET http://localhost:3333/attendees/2/badge
+Content-Type: application/json

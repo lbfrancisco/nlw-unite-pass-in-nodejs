@@ -22,7 +22,7 @@ O sistema fará um scan da credencial do participante para permitir a entrada no
 ### Regras de Negócio (RNs)
 
 - [x] O participante só pode se inscrever em um evento um única vez;
-- [ ] O participante só pode se inscrever em eventos com vagas disponíveis;
+- [x] O participante só pode se inscrever em eventos com vagas disponíveis;
 - [ ] O participante só pode realizar check-in em um evento uma única vez;
 
 ### Requisitos Não-Funcionais (RNFs)

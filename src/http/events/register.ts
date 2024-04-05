@@ -1,21 +1,18 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import {
-  RegisterToEventRequestBody,
-  RegisterToEventRequestParams,
-} from './routes'
+import { RegisterToEventRequestBody, RequestEventIdOnParams } from './routes'
 import { prisma } from '../../lib/prisma'
 
 export async function register(
   request: FastifyRequest<{
     Body: RegisterToEventRequestBody
-    Params: RegisterToEventRequestParams
+    Params: RequestEventIdOnParams
   }>,
   reply: FastifyReply,
 ) {
   const { name, email } = request.body
   const { eventId } = request.params
 
-  const attendeeAlreadyRegisteredToEvent = await prisma.attendee.findFirst({
+  const attendeeAlreadyRegisteredToEvent = await prisma.attendee.findUnique({
     where: {
       eventId_email: {
         email,
@@ -26,19 +23,36 @@ export async function register(
 
   if (attendeeAlreadyRegisteredToEvent) {
     return reply.status(200).send({
-      message: 'You are already registered to this event',
+      message: 'This e-mail is already registered to this event.',
     })
   }
 
-  const eventExists = await prisma.event.findUnique({
-    where: {
-      id: eventId,
-    },
-  })
+  const [event, amountOfAttendeesForEvent] = await Promise.all([
+    prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+    }),
 
-  if (!eventExists) {
+    prisma.attendee.count({
+      where: {
+        eventId,
+      },
+    }),
+  ])
+
+  if (!event) {
     return reply.status(400).send({
-      message: 'Event not found',
+      message: 'Event not found.',
+    })
+  }
+
+  if (
+    event?.maximumAttendees &&
+    amountOfAttendeesForEvent >= event?.maximumAttendees
+  ) {
+    return reply.status(406).send({
+      message: 'The maximum number of attendees for this event exceeds.',
     })
   }
 

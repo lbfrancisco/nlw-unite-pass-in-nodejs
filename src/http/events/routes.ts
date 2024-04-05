@@ -1,8 +1,10 @@
 import { FastifyInstance } from 'fastify'
-import { create } from './create'
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 import z from 'zod'
+
+import { create } from './create'
 import { register } from './register'
+import { get } from './get'
 
 const CreateEventRequestBodySchema = z.object({
   title: z.string().min(4),
@@ -23,12 +25,12 @@ export type RegisterToEventRequestBody = z.infer<
   typeof RegisterToEventRequestBodySchema
 >
 
-const RegisterToEventRequestParamsSchema = z.object({
+const RequestEventIdOnParamsSchema = z.object({
   eventId: z.string().uuid(),
 })
 
-export type RegisterToEventRequestParams = z.infer<
-  typeof RegisterToEventRequestParamsSchema
+export type RequestEventIdOnParams = z.infer<
+  typeof RequestEventIdOnParamsSchema
 >
 
 export async function eventsRoutes(app: FastifyInstance) {
@@ -47,7 +49,7 @@ export async function eventsRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post('/:eventId/attendee', {
     schema: {
       body: RegisterToEventRequestBodySchema,
-      params: RegisterToEventRequestParamsSchema,
+      params: RequestEventIdOnParamsSchema,
       response: {
         201: z.object({
           attendeeId: z.number().int().positive(),
@@ -55,5 +57,24 @@ export async function eventsRoutes(app: FastifyInstance) {
       },
     },
     handler: register,
+  })
+
+  app.withTypeProvider<ZodTypeProvider>().get('/:eventId', {
+    schema: {
+      params: RequestEventIdOnParamsSchema,
+      response: {
+        200: z.object({
+          event: z.object({
+            id: z.string().uuid(),
+            title: z.string(),
+            slug: z.string(),
+            details: z.string().nullable(),
+            maximumAttendees: z.number().nullable(),
+            attendeesAmount: z.number().nullable(),
+          }),
+        }),
+      },
+    },
+    handler: get,
   })
 }
