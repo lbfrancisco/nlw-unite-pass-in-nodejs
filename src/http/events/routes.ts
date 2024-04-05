@@ -5,6 +5,7 @@ import z from 'zod'
 import { create } from './create'
 import { register } from './register'
 import { get } from './get'
+import { fetchAttendees } from './fetch-attendees'
 
 const CreateEventRequestBodySchema = z.object({
   title: z.string().min(4),
@@ -31,6 +32,15 @@ const RequestEventIdOnParamsSchema = z.object({
 
 export type RequestEventIdOnParams = z.infer<
   typeof RequestEventIdOnParamsSchema
+>
+
+const RequestPageIndexStringSchema = z.object({
+  pageIndex: z.string().nullish().default('0').transform(Number),
+  query: z.string().nullish(),
+})
+
+export type RequestPageIndexQueryString = z.infer<
+  typeof RequestPageIndexStringSchema
 >
 
 export async function eventsRoutes(app: FastifyInstance) {
@@ -76,5 +86,27 @@ export async function eventsRoutes(app: FastifyInstance) {
       },
     },
     handler: get,
+  })
+
+  app.withTypeProvider<ZodTypeProvider>().get('/:eventId/attendees', {
+    schema: {
+      params: RequestEventIdOnParamsSchema,
+      querystring: RequestPageIndexStringSchema,
+      response: {
+        // 200: z.any(),
+        200: z.object({
+          attendees: z.array(
+            z.object({
+              id: z.number(),
+              name: z.string(),
+              email: z.string().email(),
+              createdAt: z.date(),
+              checkInAt: z.date().nullable(),
+            }),
+          ),
+        }),
+      },
+    },
+    handler: fetchAttendees,
   })
 }
