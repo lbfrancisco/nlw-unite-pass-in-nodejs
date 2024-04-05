@@ -10,8 +10,13 @@ import {
 import { eventsRoutes } from './http/events/routes'
 import { attendeesRoutes } from './http/attendees/routes'
 import { errorHandler } from './error-handler'
+import fastifyCors from '@fastify/cors'
 
 export const app = fastify()
+
+app.register(fastifyCors, {
+  origin: '*',
+})
 
 app.setErrorHandler(errorHandler)
 
