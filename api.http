@@ -2,7 +2,17 @@ POST http://localhost:3333/events
 Content-Type: application/json
 
 {
-  "title": "Unite Summiat",
+  "title": "Stellar Summit",
   "details": "Um evento para quem é apaixonado por programação",
   "maximumAttendees": 100
+}
+
+###
+
+POST http://localhost:3333/events/82087c71-eb73-4754-b069-42392198ba6f/attendee
+Content-Type: application/json
+
+{
+  "name": "Lucas",
+  "email": "lucas@mail.com"
 }
