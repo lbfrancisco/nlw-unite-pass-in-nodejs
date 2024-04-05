@@ -9,8 +9,11 @@ import {
 } from 'fastify-type-provider-zod'
 import { eventsRoutes } from './http/events/routes'
 import { attendeesRoutes } from './http/attendees/routes'
+import { errorHandler } from './error-handler'
 
 export const app = fastify()
+
+app.setErrorHandler(errorHandler)
 
 app.register(fastifySwagger, {
   swagger: {

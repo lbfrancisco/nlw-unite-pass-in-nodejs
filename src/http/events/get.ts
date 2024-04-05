@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { RequestEventIdOnParams } from './routes'
 import { prisma } from '../../lib/prisma'
+import { BadRequest } from '../_errors/bad-request'
 
 export async function get(
   request: FastifyRequest<{
@@ -29,9 +30,7 @@ export async function get(
   })
 
   if (!event) {
-    return reply.status(400).send({
-      message: 'Event not found.',
-    })
+    throw new BadRequest('Event not found.')
   }
 
   return reply.send({

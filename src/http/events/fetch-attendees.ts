@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { prisma } from '../../lib/prisma'
 import { RequestEventIdOnParams, RequestPageIndexQueryString } from './routes'
+import { BadRequest } from '../_errors/bad-request'
 
 export async function fetchAttendees(
   request: FastifyRequest<{
@@ -19,9 +20,7 @@ export async function fetchAttendees(
   })
 
   if (!event) {
-    return reply.status(400).send({
-      message: 'Event not found.',
-    })
+    throw new BadRequest('Event not found.')
   }
 
   const attendees = await prisma.attendee.findMany({

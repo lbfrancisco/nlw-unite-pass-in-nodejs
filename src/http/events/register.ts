@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { RegisterToEventRequestBody, RequestEventIdOnParams } from './routes'
 import { prisma } from '../../lib/prisma'
+import { BadRequest } from '../_errors/bad-request'
 
 export async function register(
   request: FastifyRequest<{
@@ -22,9 +23,7 @@ export async function register(
   })
 
   if (attendeeAlreadyRegisteredToEvent) {
-    return reply.status(200).send({
-      message: 'This e-mail is already registered to this event.',
-    })
+    throw new BadRequest('This e-mail is already registered to this event.')
   }
 
   const [event, amountOfAttendeesForEvent] = await Promise.all([
@@ -42,9 +41,7 @@ export async function register(
   ])
 
   if (!event) {
-    return reply.status(400).send({
-      message: 'Event not found.',
-    })
+    throw new BadRequest('Event not found.')
   }
 
   if (
