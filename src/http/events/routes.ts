@@ -46,6 +46,8 @@ export type RequestPageIndexQueryString = z.infer<
 export async function eventsRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post('/', {
     schema: {
+      summary: 'Create an event',
+      tags: ['events'],
       body: CreateEventRequestBodySchema,
       response: {
         201: z.object({
@@ -58,6 +60,8 @@ export async function eventsRoutes(app: FastifyInstance) {
 
   app.withTypeProvider<ZodTypeProvider>().post('/:eventId/attendee', {
     schema: {
+      summary: 'Register an attendee',
+      tags: ['attendees'],
       body: RegisterToEventRequestBodySchema,
       params: RequestEventIdOnParamsSchema,
       response: {
@@ -71,6 +75,8 @@ export async function eventsRoutes(app: FastifyInstance) {
 
   app.withTypeProvider<ZodTypeProvider>().get('/:eventId', {
     schema: {
+      summary: 'Get an event',
+      tags: ['events'],
       params: RequestEventIdOnParamsSchema,
       response: {
         200: z.object({
@@ -90,6 +96,8 @@ export async function eventsRoutes(app: FastifyInstance) {
 
   app.withTypeProvider<ZodTypeProvider>().get('/:eventId/attendees', {
     schema: {
+      summary: 'Get event attendees',
+      tags: ['events'],
       params: RequestEventIdOnParamsSchema,
       querystring: RequestPageIndexStringSchema,
       response: {

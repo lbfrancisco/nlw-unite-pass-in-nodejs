@@ -15,6 +15,8 @@ export type RequestAttendeeIdOnParams = z.infer<
 export async function attendeesRoutes(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get('/:attendeeId/badge', {
     schema: {
+      summary: 'Get an attendee badge',
+      tags: ['attendees'],
       params: RequestAttendeeIdOnParamsSchema,
       response: {
         200: z.object({
@@ -32,6 +34,8 @@ export async function attendeesRoutes(app: FastifyInstance) {
 
   app.withTypeProvider<ZodTypeProvider>().get('/:attendeeId/check-in', {
     schema: {
+      summary: 'Check-in an attendee',
+      tags: ['check-ins'],
       params: RequestAttendeeIdOnParamsSchema,
       response: {
         201: z.null(),
