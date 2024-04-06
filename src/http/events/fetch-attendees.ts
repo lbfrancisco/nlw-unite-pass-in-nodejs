@@ -59,7 +59,7 @@ export async function fetchAttendees(
         name: attendee.name,
         email: attendee.email,
         createdAt: attendee.createdAt,
-        checkInAt: attendee.checkIn?.createdAt ?? null,
+        checkedInAt: attendee.checkIn?.createdAt ?? null,
       }
     }),
   })

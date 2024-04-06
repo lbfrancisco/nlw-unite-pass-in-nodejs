@@ -8,7 +8,8 @@
     "build": "tsup src --format esm --out-dir build",
     "start": "node build/server.mjs",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",

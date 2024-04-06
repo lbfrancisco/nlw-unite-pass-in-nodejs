@@ -109,7 +109,7 @@ export async function eventsRoutes(app: FastifyInstance) {
               name: z.string(),
               email: z.string().email(),
               createdAt: z.date(),
-              checkInAt: z.date().nullable(),
+              checkedInAt: z.date().nullable(),
             }),
           ),
         }),
